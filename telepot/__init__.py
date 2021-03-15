@@ -50,6 +50,8 @@ def flavor(msg):
     elif 'id' in msg and 'total_amount' in msg:
         return 'pre_checkout_query'
     else:
+        if 'chat' in msg:
+            return 'chat'
         top_keys = list(msg.keys())
         if len(top_keys) == 1:
             return top_keys[0]
@@ -65,8 +67,9 @@ def _find_first_key(d, keys):
     for k in keys:
         if k in d:
             return k
+    if 'my_chat_member' in list(d):
+        return 'my_chat_member'
     raise KeyError('No suggested keys %s in %s' % (str(keys), str(d)))
-
 
 all_content_types = [
     'text', 'audio', 'document', 'game', 'photo', 'sticker', 'video', 'voice', 'video_note',
