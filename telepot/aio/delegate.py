@@ -84,12 +84,15 @@ def create_open(cls, *args, **kwargs):
             bot, msg, seed = seed_tuple
             try:
                 handled = await helper._invoke(j.open, msg, seed)
-                if not handled:
+                #if not handled:
+                if 'message_id' in list(msg) and not handled:
                     await helper._invoke(j.on_message, msg)
-
-                while 1:
-                    msg = await j.listener.wait()
-                    await helper._invoke(j.on_message, msg)
+                    while 1:
+                        msg = await j.listener.wait()
+                        try:
+                            await helper._invoke(j.on_message, msg)
+                        except:
+                            pass
 
             # These exceptions are "normal" exits.
             except (exception.IdleTerminate, exception.StopListening) as e:
@@ -100,7 +103,8 @@ def create_open(cls, *args, **kwargs):
             # gets overridden but fails to account for unexpected exceptions.
             except Exception as e:
                 traceback.print_exc()
-                await helper._invoke(j.on_close, e)
+                if 'message_id' in list(msg) :
+                    await helper._invoke(j.on_close, e)
 
         return wait_loop()
     return f
