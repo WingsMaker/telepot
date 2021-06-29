@@ -1,6 +1,7 @@
 # telepot - Python framework for Telegram Bot API
 
 ## Original author Nikola no longer maintaining this library. KH is maintaining it for the support of new telegram UI.
+## KH also no longer maintaining this library after this.
 
 ### [Introduction »](http://telepot.readthedocs.io/en/latest/)
 ### [Reference »](http://telepot.readthedocs.io/en/latest/reference.html)
