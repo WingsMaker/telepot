@@ -18,19 +18,19 @@ Resolution
 
 Example function to clear history:
 `
-def clear_updates(Token):
-    api_url = f"https://api.telegram.org/bot{Token}/getUpdates"
-    response = requests.get(api_url)
-    if response.status_code==200:
-        result = response.content.decode('utf-8')
-        if len(result)>0:
-            data = json.loads(result)
-            result = [ x['update_id'] for x in data['result'] if 'update_id' in list(x) ]
+    def clear_updates(Token):
+        api_url = f"https://api.telegram.org/bot{Token}/getUpdates"
+        response = requests.get(api_url)
+        if response.status_code==200:
+            result = response.content.decode('utf-8')
             if len(result)>0:
-                update_id = result[-1] + 1
-                api_url = f"https://api.telegram.org/bot{Token}/getUpdates?offset={update_id}"
-                response = requests.get(api_url)
-    return
+                data = json.loads(result)
+                result = [ x['update_id'] for x in data['result'] if 'update_id' in list(x) ]
+                if len(result)>0:
+                    update_id = result[-1] + 1
+                    api_url = f"https://api.telegram.org/bot{Token}/getUpdates?offset={update_id}"
+                    response = requests.get(api_url)
+        return
 `
 If someone click "stop the bot" from the frontend UI again, the bot will not hang anymore when this new library in used.
 
