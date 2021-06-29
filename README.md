@@ -7,6 +7,31 @@
 ### [Examples »](https://github.com/nickoala/telepot/tree/master/examples)
 ### [Changelog »](https://github.com/nickoala/telepot/blob/master/CHANGELOG.md)
 
-The reaons behind is due to Jira-061, KH trying to identify and remove the bad guy.
-meaning the incorrect message format coming  from the "stop-and-block-bot" button 
-from the telegram frontend UI. So that omnimentor is not affected by those bad guys.
+The new telegram UI added non-standard way of stopping the bot, causing the bot server malfunction in unforeseen circumstance.
+This triggered by the frontend users which stop the interaction with the bot via the new UI.
+As a result, telepot library turned into an infinite loop receiving these kind of non-standard message as exception errors.
+The application calling telepot library unable to pickup subsequent incoming messages, therefore bot users mistaken that the bot is dead.
+
+Resolution
+- Code change to recognised this kind of special message as known errors, it proceeds to read the next possible incoming message without being "hanged".
+- The application developer calling this telepot library has to clear the history manually. The workaround to write a function to "clear history" whenever the application restarts the telegram bot.
+
+Example function to clear history:
+`
+def clear_updates(Token):
+    api_url = f"https://api.telegram.org/bot{Token}/getUpdates"
+    response = requests.get(api_url)
+    if response.status_code==200:
+        result = response.content.decode('utf-8')
+        if len(result)>0:
+            data = json.loads(result)
+            result = [ x['update_id'] for x in data['result'] if 'update_id' in list(x) ]
+            if len(result)>0:
+                update_id = result[-1] + 1
+                api_url = f"https://api.telegram.org/bot{Token}/getUpdates?offset={update_id}"
+                response = requests.get(api_url)
+    return
+`
+If someone click "stop the bot" from the frontend UI again, the bot will not hang anymore when this new library in used.
+
+
