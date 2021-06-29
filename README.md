@@ -17,7 +17,7 @@ Resolution
 - The application developer calling this telepot library has to clear the history manually. The workaround to write a function to "clear history" whenever the application restarts the telegram bot.
 
 Example function to clear history:
-`
+```python
     def clear_updates(Token):
         api_url = f"https://api.telegram.org/bot{Token}/getUpdates"
         response = requests.get(api_url)
@@ -31,7 +31,7 @@ Example function to clear history:
                     api_url = f"https://api.telegram.org/bot{Token}/getUpdates?offset={update_id}"
                     response = requests.get(api_url)
         return
-`
+```
 If someone click "stop the bot" from the frontend UI again, the bot will not hang anymore when this new library in used.
 
 
