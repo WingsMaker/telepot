@@ -9,6 +9,9 @@
 
 The new telegram UI added non-standard way of stopping the bot, causing the bot server malfunction in unforeseen circumstance.
 This triggered by the frontend users which stop the interaction with the bot via the new UI.
+
+![image](https://user-images.githubusercontent.com/32192638/123756394-749a8880-d8ef-11eb-9acc-668d367d9fce.png)
+
 As a result, telepot library turned into an infinite loop receiving these kind of non-standard message as exception errors.
 The application calling telepot library unable to pickup subsequent incoming messages, therefore bot users mistaken that the bot is dead.
 
